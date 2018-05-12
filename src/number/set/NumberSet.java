@@ -1,11 +1,6 @@
 package number.set;
 
-
-
-import java.util.NoSuchElementException;
 import java.util.Random;
-import java.util.stream.IntStream;
-
 
 public class NumberSet  {
     public static int MAX_SIZE = 100;
@@ -19,28 +14,31 @@ public class NumberSet  {
 
         if(size >= MAX_SIZE) throw new Exception("Nie można nic dodać, zbiór przepełniony");
         nSet[size++] = value;
+        assert (nSet[size-1] == value): "Niepoprawnie dodano wartość!";
 
     }
 
     public void remove(int value) throws Exception {
 
-        assert(size > 0): "Nie można usunąć nieistniejącego elementu";
+        assert(size > 0): "Nie można usunąć ze zbioru bez elementów!";
 
         int[] temp = new int[MAX_SIZE];
+
         int counter = 0;
 
-        for(int i = 0; i<size; i++) {
+        for(int i = 0; i < size; i++) {
             if(nSet[i] != value)
                 temp[counter++] = nSet[i];
         }
 
         if(counter == size)
             throw new Exception("Zbiór nie posiada liczby, którą chcemy usunąć!");
-        else
-            size = counter;
+        else{
 
-        size = counter;
-        nSet = temp;
+            assert (counter >= 0): "Rozmiar nie może być ujemny!";
+            size = counter;
+            nSet = temp;
+        }
 
 
     }
@@ -59,6 +57,7 @@ public class NumberSet  {
         int randomValue;
         int minValue = getMinValue();
         int maxValue = getMaxValue();
+
 
         assert (minValue <= maxValue) : "Niepoprawny zakres!";
 
@@ -93,15 +92,25 @@ public class NumberSet  {
 
     public void divideAllElementsBy(int value) {
 
-        assert(size > 0);
+
+        assert(size > 0) : "Brak elementów w zbiorze!";
         assert(value != 0) : "Nie można dzielić przez 0 !";
+
+        int temp[] = nSet.clone();
 
         for(int i = 0;i <size;i++)
             nSet[i] /= value;
 
+        for(int i = 0; i < size; i++) {
+            assert (temp[i] != nSet[i]) : "Dzielenie nieudane!";
+        }
+
     }
 
     public boolean contains(int value) {
+
+
+        assert (size > 0): "Brak elementów w zbiorze!";
 
         for(int i = 0; i < size;i++)
             if(nSet[i] == value)
@@ -111,6 +120,7 @@ public class NumberSet  {
     }
 
     public int getSize() {
+
         assert (size >= 0) : "Rozmiar nie może byc ujemny!";
         return size;
     }
@@ -139,8 +149,6 @@ public class NumberSet  {
 
         return maxValue;
     }
-
-
 
 
 }
